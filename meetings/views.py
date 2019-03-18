@@ -1,8 +1,15 @@
-from rest_framework import generics, permissions
+from django.http import HttpResponse, JsonResponse, Http404
+from django.contrib.auth.models import User
+from django.views.decorators.csrf import csrf_exempt
+from rest_framework import generics, mixins, permissions, status
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework.response import Response
 from meetings.models import Meeting
 from meetings.serializers import MeetingSerializer, UserSerializer
-from django.contrib.auth.models import User
-from meetings.permissions import IsOwnerOrReadOnly
+from meetings.permissions import IsOwnerOrReadOnly, OnlyUserCanAccess
 
 class MeetingList(generics.ListCreateAPIView):
     queryset = Meeting.objects.all()
@@ -14,7 +21,7 @@ class MeetingList(generics.ListCreateAPIView):
 class MeetingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly)
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly, OnlyUserCanAccess)
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()
