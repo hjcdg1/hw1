@@ -15,7 +15,7 @@ class MeetingSerializer(serializers.ModelSerializer):
         for meeting in Meeting.objects.all():
             left = meeting.sinceWhen
             right = meeting.tillWhen
-            if ((left < since and since < right) or (left < till and till < right)) :
+            if ((left < since and since < right) or (left < till and till < right) or (since < left and right < till)) :
                 raise serializers.ValidationError("meeting time overlapped.")
         return data
 
