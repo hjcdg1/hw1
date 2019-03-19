@@ -7,6 +7,17 @@ class MeetingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Meeting
         fields = ('id', 'created', 'sinceWhen', 'tillWhen', 'user')
+    def validate(self, data):
+        since = data['sinceWhen']
+        till = data['tillWhen']
+        if (since >= till) :
+            raise serializers.ValidationError("sinceWhen should be earlier than tillWhen.")
+        for meeting in Meeting.objects.all():
+            left = meeting.sinceWhen
+            right = meeting.tillWhen
+            if ((left < since and since < right) or (left < till and till < right)) :
+                raise serializers.ValidationError("meeting time overlapped.")
+        return data
 
 class UserSerializer(serializers.ModelSerializer):
     meetings = serializers.PrimaryKeyRelatedField(many=True, queryset=Meeting.objects.all())    # 'meetings' 필드 추가

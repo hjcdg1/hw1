@@ -9,7 +9,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from meetings.models import Meeting
 from meetings.serializers import MeetingSerializer, UserSerializer
-from meetings.permissions import IsOwnerOrReadOnly, OnlyUserCanAccess
+from meetings.permissions import OnlyUserCanAccess
 
 class MeetingList(generics.ListCreateAPIView):
     queryset = Meeting.objects.all()
