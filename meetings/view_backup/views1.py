@@ -39,7 +39,7 @@ def meeting_detail(request, pk):
 
     elif request.method == 'PUT':
         data = JSONParser().parse(request)						# JSON -> 내용
-        serializer = SnippetSerializer(meeting, data=data)		# (객체 -> 시리얼라이저) + (내용 -> 시리얼라이저)
+        serializer = MeetingSerializer(meeting, data=data)		# (객체 -> 시리얼라이저) + (내용 -> 시리얼라이저)
         if serializer.is_valid():
             serializer.save()									# 시리얼라이저 -> 객체
             return JsonResponse(serializer.data)
