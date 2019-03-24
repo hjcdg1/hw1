@@ -19,12 +19,12 @@ class Meeting(models.Model):
     id = models.AutoField(primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
     sinceWhen = models.DateTimeField()
-    tillWhen = models.DateTimeField()
+    tilWhen = models.DateTimeField()
     user = models.ForeignKey('auth.User', related_name='meetings', on_delete=models.CASCADE)
     highlighted = models.TextField()
 
     class Meta:
-        ordering = ('id', 'created', 'sinceWhen', 'tillWhen', 'user')
+        ordering = ('id', 'created', 'sinceWhen', 'tilWhen', 'user')
 
     def save(self, *args, **kwargs):
         super(Meeting, self).save(*args, **kwargs)

@@ -23,26 +23,6 @@ class MeetingDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Meeting.objects.all()
     serializer_class = MeetingSerializer
     permission_classes = (permissions.IsAuthenticatedOrReadOnly, OnlyUserCanAccess)
-    '''
-    def update(self, request, *args, **kwargs):
-        self_meeting = self.get_object()
-        serializer = MeetingSerializer(self_meeting, data=request.data)
-        serializer.is_valid(raise_exception=True)
-        since = str(serializer['sinceWhen']) #request.data.__getitem__('sinceWhen')
-        till = str(serializer['tillWhen']) #request.data.__getitem__('tillWhen')
-        if (since >= till) :
-            raise serializers.ValidationError("sinceWhen should be earlier than tillWhen.")
-        for meeting in Meeting.objects.all():
-            if (self_meeting.id == meeting.id):
-                continue
-            left = str(meeting.sinceWhen)
-            right = str(meeting.tillWhen)
-            if ((left < since and since < right) or (left < till and till < right) or (since < left and right < till)) :
-                raise serializers.ValidationError("meeting time overlapped.")
-        serializer.is_valid(raise_exception=True)
-        return self.perform_update(serializer)
-        #return Response(serializer.data)
-    '''
 
 class UserList(generics.ListAPIView):
     queryset = User.objects.all()

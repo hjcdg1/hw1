@@ -6,29 +6,29 @@ class MeetingSerializer(serializers.ModelSerializer):
     user = serializers.ReadOnlyField(source='user.username')    # used only when serialized, not when deserialized
     class Meta:
         model = Meeting
-        fields = ('id', 'created', 'sinceWhen', 'tillWhen', 'user')
+        fields = ('id', 'created', 'sinceWhen', 'tilWhen', 'user')
 
     def validate(self, data):
         since = data['sinceWhen']
-        till = data['tillWhen']
-        if (since >= till) :
-            raise serializers.ValidationError("sinceWhen should be earlier than tillWhen.")
+        til = data['tilWhen']
+        if (since >= til) :
+            raise serializers.ValidationError("sinceWhen should be earlier than tilWhen.")
         # put
         if (self.instance) :
             for meeting in Meeting.objects.all():
                 if (self.instance.id == meeting.id):
                     continue
                 left = meeting.sinceWhen
-                right = meeting.tillWhen
-                if (since < right and left < till) :
+                right = meeting.tilWhen
+                if (since < right and left < til) :
                     raise serializers.ValidationError("meeting time overlapped.")
             return data
         # post
         else :
             for meeting in Meeting.objects.all():
                 left = meeting.sinceWhen
-                right = meeting.tillWhen
-                if (since < right and left < till) :
+                right = meeting.tilWhen
+                if (since < right and left < til) :
                     raise serializers.ValidationError("meeting time overlapped.")
             return data
 
